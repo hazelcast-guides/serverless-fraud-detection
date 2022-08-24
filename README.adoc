@@ -1,3 +1,36 @@
-// Replace <filename> with the name of your repository, and replace <tutorial name> with the title of the tutorial.
-// For guidance on using this template, see .github/CONTRIBUTING.adoc
-This repository hosts the documentation and code samples for the link:https://docs.hazelcast.com/tutorials/<filename>[<tutorial name> tutorial].
+= Serverless Fraud Detection
+:experimental: true
+
+This is an example of how to use a Viridian Serverless cluster as a fast cache for static data that is used by an AWS Lambda function to contextualize transactions and detect fraud.
+
+TIP: For step-by-step instructions of how to run this app, see the link:https://docs.hazelcast.com/tutorials/serverless-fraud-detection[tutorial].
+
+== Internal Hazelcast Developers
+
+If you want to try this tutorial in the UAT or DEV environment, edit the `hazelcast.js` file to include the following settings:
+
+```js
+let createClientConfig = () => {
+    return {
+        network: {
+            ...
+            },
+            ssl: {
+                ...
+                sslOptions: {
+                    ...
+                    // Otherwise the client will throw an error 
+                    // because the cluster's hostname doesn't match the one 
+                    // in the TLS certificate.
+                    checkServerIdentity: () => null
+                }
+            }
+        },
+        properties: {
+            // For DEV, use https://test.dev.hazelcast.cloud
+            'hazelcast.client.cloud.url': 'https://uat.hazelcast.cloud',
+            ...
+        }
+    }
+};
+```
