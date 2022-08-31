@@ -91,7 +91,7 @@ cd serverless-fraud-detection/code
 npm i
 ```
 
-. Open the Hazelcast {hazelcast-cloud} console, click *Connect Your Application*, and download the keystore files from the *Advanced Setup* tab.
+. Open the Hazelcast {hazelcast-cloud} console, click *Connect Client*, and download the keystore files from the *Advanced Setup* tab.
 
 . Save your files to the `code/` directory.
 
@@ -281,7 +281,7 @@ aws lambda add-permission --function-name ImportAirportsFn --action lambda:Invok
 aws s3api put-bucket-notification-configuration --bucket $S3_BUCKET_NAME --notification-configuration file://aws/s3_notification.json --region us-west-2
 ```
 
-. Open the Hazelcast {hazelcast-cloud} console, click *Connect Your Application*, and go to the *Advanced setup* tab. Leave this window open. You'll need some of these details in the next step.
+. Open the Hazelcast {hazelcast-cloud} console, click *Connect Client*, and go to the *Advanced setup* tab. Leave this window open. You'll need some of these details in the next step.
 
 . Configure the `ImportAirportsFn` function with the environment variables that the Hazelcast client needs to connect to your cluster.
 +
