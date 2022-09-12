@@ -23,7 +23,7 @@ let createClientConfig = () => {
         },
         clusterName: process.env.CLUSTER_NAME,
         properties: {
-            'hazelcast.client.cloud.url': 'https://api.viridian.hazelcast.cloud',
+            'hazelcast.client.cloud.url': 'https://api.viridian.hazelcast.com',
             'hazelcast.client.statistics.enabled': true,
             'hazelcast.client.statistics.period.seconds': 1,
         }
