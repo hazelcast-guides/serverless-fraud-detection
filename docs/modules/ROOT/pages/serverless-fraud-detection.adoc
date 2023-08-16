@@ -1,5 +1,5 @@
-= Serverless Fraud Detection with AWS and Hazelcast {hazelcast-cloud}
-:description: In this tutorial, you'll build a serverless solution for detecting fraudulent transactions using AWS Lambda, Hazelcast Viridian, and Node.js.
+= Fraud Detection with AWS and Hazelcast {hazelcast-cloud}
+:description: In this tutorial, you'll build a solution for detecting fraudulent transactions using AWS Lambda, Hazelcast Viridian Cloud, and Node.js.
 :page-layout: tutorial
 :page-product: cloud
 :page-categories: Caching, AWS Lambda
@@ -27,7 +27,7 @@ If transaction A is made in London and transaction B is made in New York, and th
 
 image:serverless-fraud-detection:transaction-declined.png[An invalid transaction made in New York airport]
 
-Every time a new transaction is made, the airport's coordinates are read and used as input in the haversine formula. If the data is slow to read, the whole process takes longer, which delays the transaction. To make sure that this data is always available and fast to read, it is cached in a {hazelcast-cloud} Serverless cluster because it offers fast-access in-memory storage.
+Every time a new transaction is made, the airport's coordinates are read and used as input in the haversine formula. If the data is slow to read, the whole process takes longer, which delays the transaction. To make sure that this data is always available and fast to read, it is cached in a {hazelcast-cloud} Standard cluster because it offers fast-access in-memory storage.
 
 === Architecture
 
@@ -37,13 +37,13 @@ image:serverless-fraud-detection:architecture.png[A banking client sends a POST 
 
 - The S3 bucket stores the airport data.
 
-- The `ImportAirportsFn` Lambda function ingests the airport data into the {hazelcast-cloud} Serverless cluster so that it can be queried with the lowest latency. This function is triggered by uploads to the S3 bucket so that any new data is ingested to the {hazelcast-cloud} Serverless cluster.
+- The `ImportAirportsFn` Lambda function ingests the airport data into the {hazelcast-cloud} Standard cluster so that it can be queried with the lowest latency. This function is triggered by uploads to the S3 bucket so that any new data is ingested to the {hazelcast-cloud} Standard cluster.
 
-- The `ValidateFn` Lambda function implements the fraud detection logic to validate the transactions. This function communicates with the {hazelcast-cloud} Serverless cluster to read airport data.
+- The `ValidateFn` Lambda function implements the fraud detection logic to validate the transactions. This function communicates with the {hazelcast-cloud} Standard cluster to read airport data.
 
 - The Amazon API Gateway exposes the `ValidateFn` Lambda function to a REST API resource at the `/validate` path.
 
-- The {hazelcast-cloud} Serverless cluster stores a copy of the airport data so that the `ValidateFn` Lambda function can read it faster than if it were in the S3 bucket.
+- The {hazelcast-cloud} Standard cluster stores a copy of the airport data so that the `ValidateFn` Lambda function can read it faster than if it were in the S3 bucket.
 
 == Before you Begin
 
@@ -54,14 +54,14 @@ You need the following:
 - An link:https://aws.amazon.com/resources/create-account/[AWS account]
 - link:https://docs.npmjs.com/downloading-and-installing-node-js-and-npm[npm]
 - The link:https://httpie.io/cli[HTTPie CLI]
-- A xref:cloud:ROOT:create-serverless-cluster.adoc[{hazelcast-cloud} Serverless cluster].
+- A xref:cloud:ROOT:create-serverless-cluster.adoc[{hazelcast-cloud} Standard cluster].
 +
-NOTE: This tutorial assumes that your Serverless cluster is hosted in the us-west-2 (Oregon) region. For best performance, it's important to host the AWS services in a region that's closest to your cluster. If you choose to host your Serverless cluster in a different region, edit the `--region` flag of the AWS CLI commands in this tutorial.
+NOTE: This tutorial assumes that your {hazelcast-cloud} cluster is hosted in the us-west-2 (Oregon) region. For best performance, it's important to host the AWS services in a region that's closest to your cluster. If you choose to host your Serverless cluster in a different region, edit the `--region` flag of the AWS CLI commands in this tutorial.
 
 
 == Step {counter:cnt-step}. Set Up the Project Files
 
-To set up the project, you need to download the code from GitHub, install the dependencies, and get the TLS certificate files to allow the Hazelcast client to connect to your {hazelcast-cloud} Serverless cluster.
+To set up the project, you need to download the code from GitHub, install the dependencies, and get the TLS certificate files to allow the Hazelcast client to connect to your {hazelcast-cloud} Standard cluster.
 
 . Clone the GitHub repository.
 +
@@ -91,7 +91,7 @@ cd serverless-fraud-detection/code
 npm i
 ```
 
-. Open the Hazelcast {hazelcast-cloud} console, click *Connect Client*, and download the keystore files from the *Advanced Setup* tab.
+. Open the {hazelcast-cloud} console. Next to *Connect Client*, select any client and download the keystore files from the *Advanced Setup* tab.
 
 . Save your files to the `code/` directory.
 
@@ -203,7 +203,7 @@ aws iam put-role-policy --role-name HazelcastServerlessFraudDetection --policy-n
 [[ingest]]
 == Step {counter:cnt-step}. Ingest Airport Data
 
-The code that ingests airport data from the S3 bucket into your {hazelcast-cloud} Serverless cluster uses the following resources in the `code/` directory:
+The code that ingests airport data from the S3 bucket into your {hazelcast-cloud} Standard cluster uses the following resources in the `code/` directory:
 
 - `hazelcast.js`: Creates a Hazelcast client to connect to the cluster.
 - `import.js`: Ingests the airport data from the S3 bucket into the cluster where it can be read faster. This code uses the client in the `hazelcast.js` file to communicate with the cluster.
@@ -281,7 +281,7 @@ aws lambda add-permission --function-name ImportAirportsFn --action lambda:Invok
 aws s3api put-bucket-notification-configuration --bucket $S3_BUCKET_NAME --notification-configuration file://aws/s3_notification.json --region us-west-2
 ```
 
-. Open the Hazelcast {hazelcast-cloud} console, click *Connect Client*, and go to the *Advanced setup* tab. Leave this window open. You'll need some of these details in the next step.
+. Open the {hazelcast-cloud} console. Next to *Connect Client*, select any client and go to the *Advanced setup* tab. Leave this window open. You'll need some of these details in the next step.
 
 . Configure the `ImportAirportsFn` function with the environment variables that the Hazelcast client needs to connect to your cluster.
 +
@@ -352,7 +352,7 @@ image:serverless-fraud-detection:cloudwatch-connected.png[The logs show that the
 +
 The logs show that the Lambda function was invoked when the airport data was uploaded.
 
-. Open the Hazelcast {hazelcast-cloud} console and go to *Management Center* > *SQL Browser*.
+. Open the {hazelcast-cloud} console and go to *Management Center* > *SQL Browser*.
 +
 You can see that the Lambda function ingested the airport data into Hazelcast, using the following SQL queries:
 +
@@ -543,14 +543,14 @@ http POST $INVOKE_URL/validate userId:=12345 airportCode=EWR transactionTimestam
 In this tutorial, you learned how to do the following:
 
 - Deploy a Hazelcast client to AWS Lambda.
-- Ingest data into a {hazelcast-cloud} Serverless cluster from an S3 bucket.
+- Ingest data into a {hazelcast-cloud} Standard cluster from an S3 bucket.
 - Use Hazelcast as a fast cache.
 
 == Learn More
 
 Try another link:https://docs.hazelcast.com/tutorials?product=cloud[tutorial].
 
-Learn more about Hazelcast {hazelcast-cloud} Serverless:
+Learn more about Hazelcast {hazelcast-cloud} Standard:
 
 - xref:cloud:ROOT:serverless-cluster.adoc[]
 - xref:cloud:ROOT:developer-guide.adoc[]
