@@ -1,5 +1,5 @@
-= Serverless Fraud Detection with AWS and Hazelcast {hazelcast-cloud}
-:description: In this tutorial, you'll build a serverless solution for detecting fraudulent transactions using AWS Lambda, Hazelcast Viridian Cloud, and Node.js.
+= Fraud Detection with AWS and Hazelcast {hazelcast-cloud}
+:description: In this tutorial, you'll build a solution for detecting fraudulent transactions using AWS Lambda, Hazelcast Viridian Cloud, and Node.js.
 :page-layout: tutorial
 :page-product: cloud
 :page-categories: Caching, AWS Lambda
@@ -91,7 +91,7 @@ cd serverless-fraud-detection/code
 npm i
 ```
 
-. Open the {hazelcast-cloud} console, next to *Connect Client*, select any client and download the keystore files from the *Advanced Setup* tab.
+. Open the {hazelcast-cloud} console. Next to *Connect Client*, select any client and download the keystore files from the *Advanced Setup* tab.
 
 . Save your files to the `code/` directory.
 
@@ -281,7 +281,7 @@ aws lambda add-permission --function-name ImportAirportsFn --action lambda:Invok
 aws s3api put-bucket-notification-configuration --bucket $S3_BUCKET_NAME --notification-configuration file://aws/s3_notification.json --region us-west-2
 ```
 
-. Open the {hazelcast-cloud} console, next to *Connect Client*, select any client and go to the *Advanced setup* tab. Leave this window open. You'll need some of these details in the next step.
+. Open the {hazelcast-cloud} console. Next to *Connect Client*, select any client and go to the *Advanced setup* tab. Leave this window open. You'll need some of these details in the next step.
 
 . Configure the `ImportAirportsFn` function with the environment variables that the Hazelcast client needs to connect to your cluster.
 +
