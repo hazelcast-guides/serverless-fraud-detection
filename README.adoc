@@ -19,10 +19,6 @@ let createClientConfig = () => {
                 ...
                 sslOptions: {
                     ...
-                    // Otherwise the client will throw an error 
-                    // because the cluster's hostname doesn't match the one 
-                    // in the self-signed TLS certificate.
-                    checkServerIdentity: () => null
                 }
             }
         },
