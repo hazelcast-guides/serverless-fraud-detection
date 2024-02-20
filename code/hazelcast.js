@@ -17,7 +17,8 @@ let createClientConfig = () => {
                     ca: [fs.readFileSync(path.resolve(path.join(__dirname, 'ca.pem')))],
                     cert: [fs.readFileSync(path.resolve(path.join(__dirname, 'cert.pem')))],
                     key: [fs.readFileSync(path.resolve(path.join(__dirname, 'key.pem')))],
-                    passphrase: process.env.KEYSTORE_PASSWORD
+                    passphrase: process.env.KEYSTORE_PASSWORD,
+                    checkServerIdentity: () => null
                 }
             }
         },
