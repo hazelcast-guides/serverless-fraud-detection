@@ -91,7 +91,7 @@ cd serverless-fraud-detection/code
 npm i
 ```
 
-. Open the {hazelcast-cloud} console. Next to *Connect Client*, select any client and download the keystore files from the *Advanced Setup* tab.
+. Open the {hazelcast-cloud} console. Next to *Connect Client*, select *Advanced* and download the keystore files using the *Download keystore file* link.
 
 . Save your files to the `code/` directory.
 
@@ -281,7 +281,7 @@ aws lambda add-permission --function-name ImportAirportsFn --action lambda:Invok
 aws s3api put-bucket-notification-configuration --bucket $S3_BUCKET_NAME --notification-configuration file://aws/s3_notification.json --region us-west-2
 ```
 
-. Open the {hazelcast-cloud} console. Next to *Connect Client*, select any client and go to the *Advanced setup* tab. Leave this window open. You'll need some of these details in the next step.
+. Open the {hazelcast-cloud} console. Next to *Connect Client*, select *Advanced* to view cluster token and certificate password. Leave this window open. You'll need some of these details in the next step.
 
 . Configure the `ImportAirportsFn` function with the environment variables that the Hazelcast client needs to connect to your cluster.
 +
@@ -478,9 +478,9 @@ image:serverless-fraud-detection:new-api.png[Form for creating a new API]
 . Create a new resource:
 
 - *Resource Name*: `ValidateTransactions` 
-- *Resource Path*: `/validate`
+- *Resource Path*: `/`
 
-. Create a POST method for the */validate* resource:
+. Create a POST method for the */ValidateTransactions* resource:
 
 - *Lambda Function*: `ValidateFn`
 +

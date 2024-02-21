@@ -7,7 +7,7 @@ workspace "Serverless fraud detection application" {
             s3Bucket = container "S3 Bucket" "Stores the source of truth for the airport data in the airports.json file"
             lambdaFunctionValidate = container "ValidateFn" ""
             lambdaFunctionImport = container "ImportAirportsFn" ""
-            hazelcast = container "Hazelcast Viridian Cluster" "Caches the airport data for fast reads" "" "Hazelcast"
+            hazelcast = container "Hazelcast Cloud Cluster" "Caches the airport data for fast reads" "" "Hazelcast"
         }
 
         # relationships
